@@ -1,0 +1,180 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TAM_MAX 100
+#define MAX_ARTISTAS 50
+
+typedef struct {
+    char nome[TAM_MAX];
+    char genero[TAM_MAX];
+    char origem[TAM_MAX];
+    char albuns[TAM_MAX];
+} Artista;
+
+Artista listaArtistas[MAX_ARTISTAS];
+int contadorArtistas = 0;
+
+void adicionarArtista() {
+    if (contadorArtistas == MAX_ARTISTAS) {
+        printf("Catálogo cheio.\n");
+        return;
+    }
+    Artista a;
+    printf("Nome do artista: ");
+    fgets(a.nome, TAM_MAX, stdin);
+    a.nome[strcspn(a.nome, "\n")] = 0;  
+    printf("Gênero: ");
+    fgets(a.genero, TAM_MAX, stdin);
+    a.genero[strcspn(a.genero, "\n")] = 0;
+    printf("Origem: ");
+    fgets(a.origem, TAM_MAX, stdin);
+    a.origem[strcspn(a.origem, "\n")] = 0;
+    printf("Álbuns: ");
+    fgets(a.albuns, TAM_MAX, stdin);
+    a.albuns[strcspn(a.albuns, "\n")] = 0;
+    listaArtistas[contadorArtistas++] = a;
+    printf("Artista adicionado.\n");
+}
+
+void buscarArtista() {
+    char busca[TAM_MAX];
+    printf("Nome do artista para buscar: ");
+    fgets(busca, TAM_MAX, stdin);
+    busca[strcspn(busca, "\n")] = 0;
+
+    for (int i = 0; i < contadorArtistas; i++) {
+        if (strcmp(listaArtistas[i].nome, busca) == 0) {
+            printf("Encontrado: %s, %s, %s, %s\n", listaArtistas[i].nome, listaArtistas[i].genero, listaArtistas[i].origem, listaArtistas[i].albuns);
+            return;
+        }
+    }
+    printf("Artista não encontrado.\n");
+}
+
+void editarArtista() {
+    char busca[TAM_MAX];
+    printf("Nome do artista para editar: ");
+    fgets(busca, TAM_MAX, stdin);
+    busca[strcspn(busca, "\n")] = 0;
+
+    for (int i = 0; i < contadorArtistas; i++) {
+        if (strcmp(listaArtistas[i].nome, busca) == 0) {
+            printf("Novo nome do artista: ");
+            fgets(listaArtistas[i].nome, TAM_MAX, stdin);
+            listaArtistas[i].nome[strcspn(listaArtistas[i].nome, "\n")] = 0;
+            printf("Novo gênero: ");
+            fgets(listaArtistas[i].genero, TAM_MAX, stdin);
+            listaArtistas[i].genero[strcspn(listaArtistas[i].genero, "\n")] = 0;
+            printf("Nova origem: ");
+            fgets(listaArtistas[i].origem, TAM_MAX, stdin);
+            listaArtistas[i].origem[strcspn(listaArtistas[i].origem, "\n")] = 0;
+            printf("Novos álbuns: ");
+            fgets(listaArtistas[i].albuns, TAM_MAX, stdin);
+            listaArtistas[i].albuns[strcspn(listaArtistas[i].albuns, "\n")] = 0;
+            printf("Artista editado.\n");
+            return;
+        }
+    }
+    printf("Artista não encontrado.\n");
+}
+
+void buscarArtistaBinario() {
+    char busca[TAM_MAX];
+    printf("Nome do artista para buscar (binário): ");
+    fgets(busca, TAM_MAX, stdin);
+    busca[strcspn(busca, "\n")] = 0;
+    printf("Busca binária não implementada.\n");
+}
+
+void buscarAlbumSequencial() {
+    printf("Busca sequencial por álbum não implementada.\n");
+}
+
+void removerArtista() {
+    char busca[TAM_MAX];
+    printf("Nome do artista para remover: ");
+    fgets(busca, TAM_MAX, stdin);
+    busca[strcspn(busca, "\n")] = 0;
+
+    for (int i = 0; i < contadorArtistas; i++) {
+        if (strcmp(listaArtistas[i].nome, busca) == 0) {
+            for (int j = i; j < contadorArtistas - 1; j++) {
+                listaArtistas[j] = listaArtistas[j + 1];
+            }
+            contadorArtistas--;
+            printf
+
+("Artista removido.\n");
+            return;
+        }
+    }
+    printf("Artista não encontrado.\n");
+}
+
+void escreverArquivo() {
+    FILE *arquivo = fopen("artistas.txt", "w");
+    if (arquivo == NULL) {
+        perror("Erro ao abrir o arquivo");
+        exit(1);
+    }
+
+    for (int i = 0; i < contadorArtistas; i++) {
+        fprintf(arquivo, "%s\n%s\n%s\n%s\n", listaArtistas[i].nome, listaArtistas[i].genero, listaArtistas[i].origem, listaArtistas[i].albuns);
+        fprintf(arquivo, "===========\n");
+    }
+
+    fclose(arquivo);
+    printf("Informações gravadas no arquivo artistas.txt com sucesso!\n");
+}
+
+void mostrarMenu() {
+    printf("1. Adicionar Artista\n");
+    printf("2. Buscar Artista\n");
+    printf("3. Editar Artista\n");
+    printf("4. Buscar Artista (Binário)\n");
+    printf("5. Buscar Álbum (Sequencial)\n");
+    printf("6. Remover Artista\n");
+    printf("7. Salvar no Arquivo\n");
+    printf("0. Sair\n");
+}
+
+int main() {
+    int opcao;
+    do {
+        mostrarMenu();
+        printf("Escolha uma opção: ");
+        scanf("%d%*c", &opcao);
+
+        switch (opcao) {
+            case 1:
+                adicionarArtista();
+                break;
+            case 2:
+                buscarArtista();
+                break;
+            case 3:
+                editarArtista();
+                break;
+            case 4:
+                buscarArtistaBinario();
+                break;
+            case 5:
+                buscarAlbumSequencial();
+                break;
+            case 6:
+                removerArtista();
+                break;
+            case 7:
+                escreverArquivo();
+                break;
+            case 0:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opção inválida.\n");
+        }
+    } while (opcao != 0);
+
+    return 0;
+}
